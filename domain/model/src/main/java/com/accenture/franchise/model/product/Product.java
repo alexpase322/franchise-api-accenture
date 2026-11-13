@@ -16,5 +16,4 @@ public class Product {
     private final String name;
     private final String branchId;
     private final Integer stock;
-
 }

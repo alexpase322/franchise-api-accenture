@@ -1,0 +1,7 @@
+.git
+.gradle
+.idea
+*.iml
+**/build
+build-cache
+infra/terraform/.terraform

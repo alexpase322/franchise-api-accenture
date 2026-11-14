@@ -41,7 +41,7 @@ public class ProductUseCase {
     private Mono<Product> findProductById(String franchiseId, String branchId, String productId) {
         return findBranch(franchiseId, branchId)
                 .flatMap(branch->productRepository.getProductById(branchId, productId))
-                .switchIfEmpty(Mono.error(new NotFoundException("Product not found")));
+                .switchIfEmpty(Mono.error(new NotFoundException("Product not found" )));
     }
 
     private Mono<Branch> findBranch(String franchiseId, String branchId) {

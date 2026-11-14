@@ -20,7 +20,7 @@ public class DynamoDBConfig {
     public DynamoDbAsyncClient amazonDynamoDB(@Value("${aws.dynamodb.endpoint}") String endpoint,
                                               @Value("${aws.region}") String region) {
         return DynamoDbAsyncClient.builder()
-                .credentialsProvider(ProfileCredentialsProvider.create("default"))
+                .credentialsProvider(DefaultCredentialsProvider.builder().build())
                 .region(Region.of(region))
                 .endpointOverride(URI.create(endpoint))
                 .build();

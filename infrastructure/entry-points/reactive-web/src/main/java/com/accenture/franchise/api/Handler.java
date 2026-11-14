@@ -97,8 +97,9 @@ public class Handler {
 
     public Mono<ServerResponse> getTopProducts(ServerRequest serverRequest) {
         String franchiseId = serverRequest.pathVariable("franchiseId");
-        return ServerResponse.ok()
-                .body(topStockUseCase.getTopProducts(franchiseId), BranchTopProduct.class);
+        return topStockUseCase.getTopProducts(franchiseId)
+                .collectList()
+                .flatMap(list -> ServerResponse.ok().bodyValue(list));
     }
 
 }

@@ -8,6 +8,21 @@ spring:
   profiles:
     include: null
 aws:
-  region: ${AWS_REGION:us-east-1}
+  region: "${AWS_REGION:us-east-1}"
   dynamodb:
-    endpoint: ${DYNAMODB_ENDPOINT:http://localhost:8000}
+    endpoint: "${DYNAMODB_ENDPOINT:http://localhost:8000}"
+    tables:
+      franchises: "${FRANCHISES_TABLE:franchises}"
+      branches: "${BRANCHES_TABLE:branches}"
+      products: "${PRODUCTS_TABLE:products}"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"

@@ -20,7 +20,7 @@ public class BranchUseCase {
                 .flatMap(franchise -> branchRepository.saveBranch(Branch.builder().id(UUID.randomUUID().toString()).name(name).franchiseId(franchise.getId()).build()));
     }
 
-    public Mono<Branch> renameBranch(String branchId, String franchiseId, String newName){
+    public Mono<Branch> renameBranch(String franchiseId, String branchId, String newName){
         return branchRepository.getBranchById(franchiseId, branchId)
                 .switchIfEmpty(Mono.error(new NotFoundException("Branch not found")))
                 .flatMap(branch -> branchRepository.saveBranch(Branch.builder().id(branch.getId()).franchiseId(branch.getFranchiseId()).name(newName).build()));

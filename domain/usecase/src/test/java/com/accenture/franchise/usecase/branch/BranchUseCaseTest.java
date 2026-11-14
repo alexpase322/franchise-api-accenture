@@ -79,7 +79,7 @@ class BranchUseCaseTest {
         when(branchRepository.getBranchById("f1", "b1")).thenReturn(Mono.just(branch));
         saveReturnsArgument();
 
-        StepVerifier.create(branchUseCase.renameBranch("b1", "f1", "New name"))
+        StepVerifier.create(branchUseCase.renameBranch("f1", "b1", "New name"))
                 .assertNext(renamed -> {
                     assertEquals("New name", renamed.getName());
                     assertEquals("b1", renamed.getId());
@@ -92,7 +92,7 @@ class BranchUseCaseTest {
     void shouldFailToRenameWhenBranchDoesNotExist() {
         when(branchRepository.getBranchById("f1", "b1")).thenReturn(Mono.empty());
 
-        StepVerifier.create(branchUseCase.renameBranch("b1", "f1", "New name"))
+        StepVerifier.create(branchUseCase.renameBranch("f1", "b1", "New name"))
                 .expectError(NotFoundException.class)
                 .verify();
 

@@ -3,6 +3,7 @@ package com.accenture.franchise.api;
 import com.accenture.franchise.api.dto.CreateProductRequest;
 import com.accenture.franchise.api.dto.NameRequest;
 import com.accenture.franchise.api.dto.StockRequest;
+import com.accenture.franchise.model.exception.InvalidDataException;
 import com.accenture.franchise.model.topstock.BranchTopProduct;
 import com.accenture.franchise.usecase.branch.BranchUseCase;
 import com.accenture.franchise.usecase.franchise.FranchiseUseCase;
@@ -26,6 +27,7 @@ public class Handler {
 
     public Mono<ServerResponse> createFranchise(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(NameRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body -> franchiseUseCase.saveFranchise(body.name()))
                 .flatMap(franchise -> ServerResponse.status(HttpStatus.CREATED)
                         .bodyValue(franchise));
@@ -34,6 +36,7 @@ public class Handler {
     public Mono<ServerResponse> renameFranchise(ServerRequest serverRequest) {
         String id = serverRequest.pathVariable("franchiseId");
         return serverRequest.bodyToMono(NameRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body->franchiseUseCase.renameFranchise(id, body.name()))
                 .flatMap(franchise -> ServerResponse.status(HttpStatus.OK).bodyValue(franchise));
     }
@@ -41,6 +44,7 @@ public class Handler {
     public Mono<ServerResponse> createBranch(ServerRequest serverRequest) {
         String franchiseId = serverRequest.pathVariable("franchiseId");
         return serverRequest.bodyToMono(NameRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body->branchUseCase.createBranch(franchiseId, body.name()))
                 .flatMap(branch -> ServerResponse.status(HttpStatus.CREATED).bodyValue(branch));
     }
@@ -49,6 +53,7 @@ public class Handler {
         String franchiseId = serverRequest.pathVariable("franchiseId");
         String branchId = serverRequest.pathVariable("branchId");
         return serverRequest.bodyToMono(NameRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body->branchUseCase.renameBranch(franchiseId, branchId, body.name()))
                 .flatMap(branch -> ServerResponse.status(HttpStatus.OK).bodyValue(branch));
     }
@@ -57,6 +62,7 @@ public class Handler {
         String franchiseId = serverRequest.pathVariable("franchiseId");
         String branchId = serverRequest.pathVariable("branchId");
         return serverRequest.bodyToMono(CreateProductRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body->productUseCase.createProduct(franchiseId, branchId, body.name(), body.stock()))
                 .flatMap(product -> ServerResponse.status(HttpStatus.CREATED).bodyValue(product));
     }
@@ -66,6 +72,7 @@ public class Handler {
         String branchId = serverRequest.pathVariable("branchId");
         String productId = serverRequest.pathVariable("productId");
         return serverRequest.bodyToMono(NameRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body->productUseCase.renameProduct(franchiseId, branchId, productId, body.name()))
                 .flatMap(product -> ServerResponse.status(HttpStatus.OK).bodyValue(product));
     }
@@ -75,6 +82,7 @@ public class Handler {
         String branchId = serverRequest.pathVariable("branchId");
         String productId = serverRequest.pathVariable("productId");
         return serverRequest.bodyToMono(StockRequest.class)
+                .switchIfEmpty(Mono.error(new InvalidDataException("Request body is required")))
                 .flatMap(body->productUseCase.updateStock(franchiseId, branchId, productId, body.stock()))
                 .flatMap(stock -> ServerResponse.status(HttpStatus.OK).bodyValue(stock));
     }
@@ -92,4 +100,5 @@ public class Handler {
         return ServerResponse.ok()
                 .body(topStockUseCase.getTopProducts(franchiseId), BranchTopProduct.class);
     }
+
 }

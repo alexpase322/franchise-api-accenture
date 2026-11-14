@@ -9,6 +9,7 @@ allprojects {
         mavenCentral()
     }
     dependencies {
+		implementation platform('software.amazon.awssdk:bom:2.57.13')
     }
 }
 
@@ -23,4 +24,3 @@ subprojects {
     ext['jackson-2-bom.version'] = "2.23.0"
     ext['jackson-bom.version'] = "3.3.0"
 }
-
